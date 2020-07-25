@@ -1,0 +1,98 @@
+# Average age of driver involved in accidents during the covid-19 windows of both years
+
+SELECT "Crash Year", AVG("Person Age") FROM crash_data WHERE ("Person Type" = '1 - DRIVER') AND ("Date" BETWEEN '2019-03-23' AND '2019-05-23' OR  "Date" BETWEEN '2020-03-23' AND '2020-05-23') GROUP BY "Crash Year"
+
+AVG("Person Age)        Crash Year
+35.3289532448714  	2019
+34.9591194664137        2020
+
+
+
+# Average age of driver involved in deadly accidents during the covid-19 windows of both years
+
+SELECT AVG("Person Age"), "Crash Year" FROM (SELECT "Person Age", "Crash Year" FROM crash_data WHERE ("Person Type" = "1 - DRIVER" AND "Crash Death Count" >0) AND ("Date" BETWEEN  '2019-03-23' AND '2019-05-23' OR "Date" BETWEEN '2020-03-23' AND '2020-05-23')) GROUP BY "Crash Year"
+
+AVG("Person Age)        Crash Year
+39.6128266033254	2019
+40.1192810457516	2020
+
+
+
+# Average age of driver involved in accidents with more than 2 deaths during the covid-19 windows of both years
+
+SELECT AVG("Person Age"), "Crash Year" FROM (SELECT "Person Age", "Crash Year" FROM crash_data WHERE ("Person Type" = "1 - DRIVER" AND "Crash Death Count" >2) AND ("Date" BETWEEN  '2019-03-23' AND '2019-05-23' OR "Date" BETWEEN '2020-03-23' AND '2020-05-23')) GROUP BY "Crash Year"
+
+AVG("Person Age)        Crash Year
+39.5263157894737	2019
+35.0			2020
+
+
+
+# Amount of Crashes during the covid-19 windows of both years
+
+SELECT "Crash Year", COUNT(distinct "Crash ID") FROM crash_data WHERE "date" BETWEEN '2019-03-23' AND '2019-05-23' OR  "Date" BETWEEN '2020-03-23' AND '2020-05-23' GROUP BY "Crash Year"
+
+COUNT(distinct"Crash ID")  Crash Year
+111768			   2019
+61560			   2020
+
+
+
+# Amount of deaths during the covid-19 windows of both years
+
+SELECT SUM("Crash Death Count"), "Crash Year" FROM (SELECT "Crash Death Count", "Crash Year" FROM crash_data WHERE "Date" BETWEEN  '2019-03-23' AND '2019-05-23' OR "Date" BETWEEN '2020-03-23' AND '2020-05-23'  GROUP BY "Crash ID") GROUP BY "Crash Year"
+
+SUM("Crash Death Count")     Crash Year
+624			     2019
+511			     2020
+
+
+
+# Amount of crashes during the covid-19 windows of both years in Travis County
+
+SELECT "Crash Year", COUNT(distinct "Crash ID"), "County" FROM crash_data WHERE ("County" = 'TRAVIS') AND ("Date" BETWEEN '2019-03-23' AND '2019-05-23' OR  "Date" BETWEEN '2020-03-23' AND '2020-05-23') GROUP BY "Crash Year"
+
+COUNT(distinct "Crash ID")     Crash Year
+3646			       2019
+1745			       2020
+
+
+
+# Average amount of crashes in all counties other than Travis for 2019
+
+SELECT AVG("Crashes"), "Crash Year" FROM (SELECT "Crash Year", "County", COUNT(distinct "Crash ID") AS "Crashes" FROM crash_data WHERE ("County" != 'TRAVIS') AND ("Crash Year" = '2019') GROUP BY "County") GROUP BY "Crash Year"
+
+AVG("Crashes")     Crash Year
+584.664		   2019
+
+
+
+# Average amount of crashes in all counties other than Travis for 2020
+
+SELECT AVG("Crashes"), "Crash Year" FROM (SELECT "Crash Year", "County", COUNT(distinct "Crash ID") AS "Crashes" FROM crash_data WHERE ("County" != 'TRAVIS') AND ("Crash Year" = '2020') GROUP BY "County") GROUP BY "Crash Year"
+
+
+AVG("Crashes")     Crash Year
+381.0		   2020
+
+
+
+# Amount of crashes just in month of March(SXSW) of 2019 and 2020 in Travis County
+
+SELECT "Crash Year", COUNT(distinct "Crash ID") FROM crash_data WHERE ("County" = 'TRAVIS') AND ("Date" BETWEEN '2019-03-1' AND '2019-03-30' OR  "Date" BETWEEN '2020-03-1' AND '2020-03-30') GROUP BY "Crash Year"
+
+COUNT(distinct "Crash ID")     Crash Year
+1255			       2019
+774			       2020
+
+
+
+# Drunk driving related crashes for 2019 and 2020
+
+SELECT "Crash Year", COUNT("Driver Alcohol Result") FROM crash_data WHERE "Driver Alcohol Result" = '1 - POSITIVE' GROUP BY "Crash Year"
+
+COUNT("Driver Alcohol Result")		Crash Year
+2596					2019
+1350					2020
+
+
